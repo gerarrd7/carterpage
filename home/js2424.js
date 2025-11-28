@@ -317,6 +317,42 @@
         // Gestion des jeux
         function handleGameClick(gameUrl, event) {
             event.preventDefault();
+            
+            // Bloquer l'accès à Aviator
+            if (gameUrl.includes('Aviator') || gameUrl.includes('gameAvia')) {
+                const language = getParam('lang') || 'fr';
+                const texts = translations[language] || translations['fr'];
+                
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const loadingText = document.getElementById('loadingText');
+                
+                let unavailableMessage;
+                switch(language) {
+                    case 'en':
+                        unavailableMessage = 'Unavailable at the moment';
+                        break;
+                    case 'ru':
+                        unavailableMessage = 'Недоступно на данный момент';
+                        break;
+                    case 'ar':
+                        unavailableMessage = 'غير متوفر في الوقت الحالي';
+                        break;
+                    default:
+                        unavailableMessage = 'Indisponible pour le moment';
+                        break;
+                }
+                
+                loadingText.textContent = unavailableMessage;
+                loadingOverlay.classList.add('active');
+                
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('active');
+                    loadingText.textContent = texts.loadingText;
+                }, 2000);
+                
+                return;
+            }
+            
             showLoading();
             
             setTimeout(() => {
@@ -392,7 +428,7 @@
             // Attendre un peu pour que tous les éléments soient rendus
             setTimeout(() => {
                 initializeSearch();
-                initializeStickySearch();
+                // initializeStickySearch() désactivé - barre de recherche suit le contenu
             }, 100);
 
             // Mode toggle
@@ -588,45 +624,10 @@
             }
         }
         
-        // Gestion du comportement sticky de la barre de recherche
+        // La barre de recherche suit maintenant le contenu sans être sticky
         function initializeStickySearch() {
-            const searchContainer = document.querySelector('.search-container');
-            if (!searchContainer) return;
-            
-            let searchOriginalPosition = null;
-            let isSticky = false;
-            
-            function handleSearchSticky() {
-                if (!searchOriginalPosition) {
-                    const rect = searchContainer.getBoundingClientRect();
-                    searchOriginalPosition = rect.top + window.scrollY;
-                }
-                
-                const scrollTop = window.scrollY;
-                const threshold = searchOriginalPosition - 100;
-                
-                if (scrollTop > threshold && !isSticky) {
-                    searchContainer.classList.add('sticky');
-                    isSticky = true;
-                } else if (scrollTop <= threshold && isSticky) {
-                    searchContainer.classList.remove('sticky');
-                    isSticky = false;
-                }
-            }
-            
-            window.addEventListener('load', function() {
-                searchOriginalPosition = null;
-                handleSearchSticky();
-            });
-            
-            window.addEventListener('scroll', handleSearchSticky);
-            
-            window.addEventListener('resize', function() {
-                searchOriginalPosition = null;
-                isSticky = false;
-                searchContainer.classList.remove('sticky');
-                setTimeout(handleSearchSticky, 100);
-            });
+            // Fonction désactivée - la barre de recherche suit le contenu
+            return;
         }
         
         // Préchargement des images
@@ -646,6 +647,6 @@
             // Le DOM est déjà chargé
             setTimeout(() => {
                 initializeSearch();
-                initializeStickySearch();
+                // initializeStickySearch() désactivé - barre de recherche suit le contenu
             }, 100);
         }
