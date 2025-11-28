@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title id="page-title">Cassa Gems Mines - Professional Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://i.ibb.co/20Yygtt/Background-Eraser-20250511-212545994.jpg" type="image/x-icon">
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-light: #38bdf8;
+            --secondary-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --background-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --shadow-primary: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-elevated: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --cell-bg: rgba(15, 23, 42, 0.8);
+            --cell-hover: rgba(14, 165, 233, 0.1);
+            --cell-active: rgba(14, 165, 233, 0.2);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--background-gradient);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem 0;
+            position: relative;
+        }
+
+        /* Background particles effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+            background-size: 200% 200%, 300% 300%, 250% 250%;
+            animation: floatingGradients 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes floatingGradients {
+            0%, 100% {
+                background-position: 0% 0%, 100% 100%, 50% 50%;
+                opacity: 0.6;
+            }
+            25% {
+                background-position: 30% 20%, 70% 80%, 80% 30%;
+                opacity: 0.8;
+            }
+            50% {
+                background-position: 60% 40%, 40% 60%, 20% 70%;
+                opacity: 1;
+            }
+            75% {
+                background-position: 80% 60%, 20% 40%, 70% 20%;
+                opacity: 0.7;
+            }
+        }
+
+        /* Floating geometric shapes */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(14, 165, 233, 0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(16, 185, 129, 0.2), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(239, 68, 68, 0.2), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(245, 158, 11, 0.2), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(168, 85, 247, 0.2), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px, 150px 120px, 180px 90px, 220px 110px, 170px 130px;
+            animation: floatingDots 25s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes floatingDots {
+            0% {
+                transform: translateY(0px) translateX(0px);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-40px) translateX(-15px);
+            }
+            75% {
+                transform: translateY(-20px) translateX(5px);
+            }
+            100% {
+                transform: translateY(0px) translateX(0px);
+            }
+        }
+
+        /* Animated geometric lines */
+        .animated-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+            border-radius: 2px;
+            animation: moveLine 15s linear infinite;
+        }
+
+        .line:nth-child(1) {
+            width: 200px;
+            height: 2px;
+            top: 20%;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .line:nth-child(2) {
+            width: 150px;
+            height: 1px;
+            top: 50%;
+            animation-delay: 3s;
+            animation-duration: 22s;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+        }
+
+        .line:nth-child(3) {
+            width: 100px;
+            height: 1px;
+            top: 80%;
+            animation-delay: 6s;
+            animation-duration: 16s;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.15), transparent);
+        }
+
+        @keyframes moveLine {
+            0% {
+                transform: translateX(-100vw) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Pulsing circles */
+        .pulsing-circles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            animation: pulseCircle 8s ease-in-out infinite;
+        }
+
+        .circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 15%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 2s;
+            border-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 25%;
+            animation-delay: 4s;
+            border-color: rgba(245, 158, 11, 0.1);
+        }
+
+        @keyframes pulseCircle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        /* Falling diamonds animation */
+        .falling-diamonds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .diamond {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(45deg, #00ffff, #00bcd4, #0ea5e9);
+            transform: rotate(45deg);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.4), 0 0 15px rgba(0, 188, 212, 0.3);
+            animation: fallDiamond linear infinite;
+            opacity: 0.6;
+        }
+
+        .diamond::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.6), transparent);
+            border-radius: 1px;
+        }
+
+        .diamond:nth-child(1) {
+            left: 10%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+            background: linear-gradient(45deg, #00ffff, #38bdf8);
+            box-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
+        }
+
+        .diamond:nth-child(2) {
+            left: 25%;
+            animation-duration: 10s;
+            animation-delay: 2s;
+            background: linear-gradient(45deg, #00ffcc, #34d399);
+            box-shadow: 0 0 6px rgba(0, 255, 204, 0.4);
+        }
+
+        .diamond:nth-child(3) {
+            left: 40%;
+            animation-duration: 12s;
+            animation-delay: 4s;
+            background: linear-gradient(45deg, #ffff00, #fbbf24);
+            box-shadow: 0 0 6px rgba(255, 255, 0, 0.4);
+        }
+
+        .diamond:nth-child(4) {
+            left: 55%;
+            animation-duration: 14s;
+            animation-delay: 6s;
+            background: linear-gradient(45deg, #ff0080, #f87171);
+            box-shadow: 0 0 6px rgba(255, 0, 128, 0.4);
+        }
+
+        .diamond:nth-child(5) {
+            left: 70%;
+            animation-duration: 9s;
+            animation-delay: 1s;
+            background: linear-gradient(45deg, #cc00ff, #c084fc);
+            box-shadow: 0 0 6px rgba(204, 0, 255, 0.4);
+        }
+
+        .diamond:nth-child(6) {
+            left: 85%;
+            animation-duration: 11s;
+            animation-delay: 3s;
+            background: linear-gradient(45deg, #00e6ff, #67e8f9);
+            box-shadow: 0 0 6px rgba(0, 230, 255, 0.4);
+        }
+
+        .diamond:nth-child(7) {
+            left: 15%;
+            animation-duration: 13s;
+            animation-delay: 5s;
+            background: linear-gradient(45deg, #80ff00, #a3e635);
+            box-shadow: 0 0 6px rgba(128, 255, 0, 0.4);
+        }
+
+        .diamond:nth-child(8) {
+            left: 65%;
+            animation-duration: 15s;
+            animation-delay: 7s;
+            background: linear-gradient(45deg, #ff8000, #fb923c);
+            box-shadow: 0 0 6px rgba(255, 128, 0, 0.4);
+        }
+
+        @keyframes fallDiamond {
+            0% {
+                transform: translateY(-50px) rotate(45deg);
+                opacity: 0.6;
+            }
+            25% {
+                opacity: 0.5;
+                transform: translateY(25vh) rotate(135deg);
+            }
+            50% {
+                opacity: 0.4;
+                transform: translateY(50vh) rotate(225deg);
+            }
+            75% {
+                opacity: 0.3;
+                transform: translateY(75vh) rotate(315deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(405deg);
+            }
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background-gradient);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .loader::before,
+        .loader::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .loader::after {
+            border-top-color: var(--secondary-color);
+            animation-delay: -0.75s;
+            animation-duration: 2s;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            opacity: 0;
+            animation: fadeInText 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        .container {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-elevated);
+            padding: 1.5rem;
+            margin: 0.5rem;
+            min-width: 350px;
+            max-width: 420px;
+            width: 100%;
+            max-height: 95vh;
+            position: relative;
+            overflow: visible;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0.6;
+        }
+
+        .container.visible {
+            display: block;
+            animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .game-section {
+            margin-bottom: 1.2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: var(--cell-bg);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--cell-hover);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .cell:hover::before {
+            opacity: 1;
+        }
+
+        .cell:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.2);
+        }
+
+        .cell.animate {
+            animation: revealTrap 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-color: var(--secondary-color);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        @keyframes revealTrap {
+            0% {
+                transform: scale(0.3);
+            }
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2) rotate(5deg);
+                opacity: 0.5;
+            }
+            75% {
+                transform: scale(1.05) rotate(-2deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .cell img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            animation: trapAppear 0.5s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes trapAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .controls {
+            margin-bottom: 1rem;
+        }
+
+        .selector-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1rem;
+            gap: 0.8rem;
+        }
+
+        .selector-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .selector-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .selector-btn:active {
+            transform: scale(0.95);
+        }
+
+        .selector-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #trapCount {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 100px;
+            text-align: center;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            position: relative;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-primary.vibrating {
+            animation: vibrate 0.1s ease-in-out infinite;
+        }
+
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0) translateY(-2px); }
+            25% { transform: translateX(-1px) translateY(-2px); }
+            75% { transform: translateX(1px) translateY(-2px); }
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0.4rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .back-button:hover {
+            color: var(--primary-color);
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateX(-4px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+            body {
+                padding: 0.3rem 0;
+            }
+            
+            .container {
+                min-width: unset;
+                width: 95vw;
+                margin: 0.3rem;
+                padding: 1rem;
+                max-height: 98vh;
+            }
+
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .grid {
+                gap: 6px;
+                padding: 0.6rem;
+                max-width: 240px;
+            }
+
+            .selector-container {
+                padding: 0.6rem 0.8rem;
+                gap: 0.6rem;
+            }
+
+            .selector-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            #trapCount {
+                font-size: 0.9rem;
+                min-width: 80px;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .action-buttons {
+                gap: 0.6rem;
+            }
+
+            .btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .back-button {
+                font-size: 0.8rem;
+                gap: 0.3rem;
+            }
+        }
+
+        /* Loading states */
+        .loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background elements -->
+    <div class="animated-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+    
+    <div class="pulsing-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Falling diamonds -->
+    <div class="falling-diamonds">
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond"></div>
+    </div>
+
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+        <div class="loading-text" id="loadingText">Chargement de Gems Mines...</div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <h1 class="title" id="title">Gems Mines</h1>
+            <p class="subtitle" id="subtitle">Prédicteur de mines professionnel</p>
+        </div>
+
+        <div class="game-section">
+            <div class="grid" id="gameGrid"></div>
+        </div>
+
+        <div class="controls">
+            <div class="selector-container">
+                <button class="selector-btn" id="decrease" aria-label="Diminuer le nombre de pièges">−</button>
+                <span id="trapCount">2 pièges</span>
+                <button class="selector-btn" id="increase" aria-label="Augmenter le nombre de pièges">+</button>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="predictBtn" aria-label="Lancer la prédiction">
+                    🔮 Prédictions
+                </button>
+                <button class="btn btn-secondary" id="resetBtn" aria-label="Réinitialiser le jeu">
+                    ↻ Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <button class="back-button" id="backButton" aria-label="Retour à la page précédente">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Retour
+        </button>
+    </div>
+    <script src="js.js">
+    </script>
+</body>
+</html>
